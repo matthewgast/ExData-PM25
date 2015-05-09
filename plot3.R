@@ -17,4 +17,17 @@ plot3 <- function () {
     source("pm25-project.R")
     readData()
     te <- totalEmissionsByTypeByYearByLocation("24510")
+
+    library(ggplot2)
+
+    ggplot(te,
+           aes(x=factor(year),y=emissions)) +
+
+        facet_grid(. ~ type) +
+        geom_bar(stat="identity") +
+        xlab("year") +
+        ylab("total PM2.5 emission (tons)")
+
+    # To do: add legend for type?
+    # Change vertical scale per type?
 }

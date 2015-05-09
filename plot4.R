@@ -14,11 +14,18 @@ plot4 <- function () {
     readData()
     coal <- totalFuelEmissionsByYear("coal")
 
-    barplot(coal$emissions,
-            names.arg=coal$year,
-            xlab="Year",
-            ylab=expression("Total PM"[2.5]*" Emissions (tons)"),
-            main=expression("PM"[2.5]*" Emissions from Coal Combusion in the U.S. By Year"),
-            )
+    library(ggplot2)
 
+    ggplot(coal,
+           aes(x=factor(year),y=emissions)) +
+        
+        geom_bar(stat="identity") +
+        xlab("year") +
+        ylab(expression("PM"[2.5]*" Emissions from Coal Combusion in the U.S. By Year")) +
+        ggtitle ("Coal Combustion Emissions")
+
+    # To do:
+    # 1. Rescale vertical axis so that it's not exponential
+    # 2. Add color?
+    
 }

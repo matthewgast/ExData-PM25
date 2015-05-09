@@ -12,14 +12,14 @@
 plot5 <- function () {
     source("pm25-project.R")
     readData()
-    baltimore.cars <- motorVehicleEmissions("24510")
+    balt.cars <- motorVehicleEmissions("24510")
 
-    barplot(te$emissions,
-            names.arg=te$year,
-            xlab="Year",
-            ylab=expression("Total PM"[2.5]*" Emissions (tons)"),
-            main=expression("PM"[2.5]*" Emissions in Baltimore from Cars By Year"),
-            )
+    library(ggplot2)
+    ggplot (balt.cars, aes(x=factor(year),y=emissions)) +
+        geom_bar(stat="identity") +
+        xlab("year") +
+        ylab(expression("Total PM"[2.5]*" Emissions (tons)")) +
+        ggtitle(expression("PM"[2.5]*" Emissions in Baltimore from Cars By Year"))
 
     # Todo: rescale y axis
 }
