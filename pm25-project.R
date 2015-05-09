@@ -1,11 +1,33 @@
+## pm25-project.R
+##
+## Matthew Gast, May 2015
+##
+## Course: "Exploratory Data Analysis" at the JHU Bloomberg School of
+## Health (Coursera Data Science Specialization).  This set of
+## functions supports the graphics plotting required for the second
+## course project.  These functions read in the data and return data
+## structures that can be plotted as required for each of the parts of
+## the assignment.
+
 readData <- function (directory) {
-  
+# This function reads the National Emissions Inventory (NEI) and its
+# Source Classification Codes (SCC).  The data is read into global
+# variables and then treated as a constant by other functions for
+# analysis.
+#
+# Input:  A directory to read the two data files from.
+# Output: None, but the "nei" and "scc" variables are defined in the global
+#         environment.
+    
   cwd <- getwd()
   if (missing(directory)) {
     directory <- "/Users/mgast/Dropbox/data-science-specialization/4-exploratory-data-analysis/prog-assignment-2"
   }
-  
-  # Somewhat bad style to access global environment, but hey, these are essentially constants
+
+  # Reading takes some time, so only read them if they don't already exist
+  #
+  # Possible improvement: test to see if they have been altered and re-read
+  # them if they have been accidentally overwritten
   if (!exists("nei",where=globalenv())) {
     message("Reading NEI data")
     nei <<- readRDS("summarySCC_PM25.rds")    
@@ -18,75 +40,102 @@ readData <- function (directory) {
   setwd(cwd)
 }
 
-totalEmissions <- function () {
-  # Have total emissions from PM2.5 decreased in the United States from 1999 to 2008?
-  # Using the base plotting system, make a plot showing the total PM2.5 emission
-  # from all sources for each of the years 1999, 2002, 2005, and 2008.
+totalEmissionsByYear <- function () {
+# This function returns the total emissions per year for all sources.
+#
+# Input:  None, though it accesses the NEI data in the global environment.
+# Output: A data frame with total emissions by year
+
   library(dplyr)
-  
-  summarize(group_by(nei,year),sum(Emissions))
+  total <- summarize(group_by(nei,year),sum(Emissions))
+  names(total) <- c("year","emissions")
+  total
 }
 
-totalEmissionsByLocation <- function (locationCode) {
-  # Have total emissions from PM2.5 decreased in the Baltimore City, Maryland
-  # (fips == "24510") from 1999 to 2008? Use the base plotting system to make a plot
-  #answering this question.
-  
+totalEmissionsByYearByLocation <- function (locationCode) {
+# This function returns the total emissions per year in a particular location,
+# where the location is identified by a FIPS code.  The FIPS code is a string
+# and must be matched as one.
+#
+# Input:  A string to be used as the location code.  The NEI data must also
+#         be present in the global environment.  If no location string is
+#         supplied, results will be returned for Baltimore City.
+# Output: A data frame with emissions by year, for the given location.
+    
   library(dplyr)
-  
   if (missing(locationCode)) {
-    # Baltimore city
-    locationCode <- 24510
+    # Baltimore City is 24510
+    locationCode <- "24510"
   }
   
-  summarize(group_by(filter(nei,fips==locationCode),year),sum(Emissions))
+  total <- summarize(group_by(filter(nei,fips==locationCode),year),sum(Emissions))
+  names(total) <- c("year","emissions")
+  total
 }
 
-totalEmissionsByTypeByLocation <- function (locationCode) {
-  # Of the four types of sources indicated by the type (point, nonpoint, onroad,
-  # nonroad) variable, which of these four sources have seen decreases in emissions
-  # from 1999–2008 for Baltimore City? Which have seen increases in emissions from
-  # 1999–2008? Use the ggplot2 plotting system to make a plot answer this question.
-  
+totalEmissionsByTypeByYearByLocation <- function (locationCode) {
+# This function returns the total emissions per year in a particular location
+# for each type (point/nonpoint/onroad/non-road) in the NEI.
+#
+# Input:  A string to be used as the location code.  If no location string is
+#         supplied, results will be returned for Baltimore City.  NEI data
+#         must be present in the global environment.
+# Output: A data frame with total emissions for each type, shown sequentially
+#         by year.
+    
   library(dplyr)
-  
   if (missing(locationCode)) {
-    # Baltimore city
-    locationCode <- 24510
+    # Baltimore City location code
+    locationCode <- "24510"
   }
   
-  summarize(group_by(filter(nei,fips==24510),year,type),sum(Emissions))
+  total <- summarize(group_by(filter(nei,fips==locationCode),type,year),sum(Emissions))
+  names(total) <- c("year","emissions")
+  total
 }
 
-totalCoalEmissions <- function () {
-  # Across the United States, how have emissions from coal combustion-related
-  # sources changed from 1999–2008?
-  
-  #is this coal combustion?
-  coalEISector <- grepl("coal",scc$EI.Sector,ignore.case=TRUE)
-  EIsectorcodes <- scc[coalEISector,c("SCC")]
-  
-  coalnei <- nei[(nei$SCC %in% EIsectorcodes),]
-  summarize(group_by(coalnei,year),sum(Emissions))
+totalFuelEmissionsByYear <- function (fuel) {
+# This function returns the total emissions from a particular type of fuel
+# in the entire United States over time
+#
+# Input:  A string with the type of fuel to assess emissions for.  If no
+#         fuel is supplied, the function defaults to "coal" for the
+#         assignment.  NEI data must be in the global environment.
+# Output: A data frame with the total emissions from the specified fuel
+
+  if (missing(fuel)) {
+      fuel <- "coal"
+  }
+
+  # Test if this is from the given fuel, then take only those emissions
+  is.from.fuel <- grepl(fuel,scc$EI.Sector,ignore.case=TRUE)
+  fuel.sources <- scc[is.from.fuel,c("SCC")]
+  fuel.emit <- nei[nei$SCC %in% fuel.sources,]
+
+  total <- summarize(group_by(fuel.emit,year),sum(Emissions))
+  names(total) <- c("year","emissions")
+  total
 }
 
 motorVehicleEmissions <- function (location=NULL) {
-  # How have emissions from motor vehicle sources changed from 1999–2008 in
-  # Baltimore City?
-  #
-  # Compare emissions from motor vehicle sources in Baltimore City with emissions
-  # from motor vehicle sources in Los Angeles County, California (fips == "06037").
-  # Which city has seen greater changes over time in motor vehicle emissions?
+# This function returns the emissions from on-road motor vehicles in a given
+# location over time.
+#
+# Input:  A location code, as a string, to retrieve motor vehicle emission
+#         information.  If no string is given, the default is to return
+#         for the entire country. NEI data must be in the global environment.
+# Output: A data frame with on-road emissions over time for the location.
+
+    # Vehicle emissions are identified by a type of "ON-ROAD"
+    if (is.null(location)) {
+        # Select from entire country.
+        road_emit <- filter(nei,type=="ON-ROAD")
+    } else {
+        # pick only supplied location
+        road_emit <- filter(nei,fips==location & type=="ON-ROAD")
+    }
   
-  # motor vehicle only
-  
-  if (is.null(location)) {
-    # pick everything
-    road_emit <- filter(nei,type=="ON-ROAD")
-  } else {
-    # pick only supplied location
-    road_emit <- filter(nei,fips==location & type=="ON-ROAD")
-  }
-  
-  summarize(group_by(road_emit,year),sum(Emissions))
+    total <- summarize(group_by(road_emit,year),sum(Emissions))
+    names(total) <- c("year","emissions")
+    total
 }
