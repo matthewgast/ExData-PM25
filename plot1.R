@@ -22,7 +22,7 @@ plot1 <- function () {
             names.arg=te$year,
             xlab="Year",
             ylab=expression("Total PM"[2.5]*" Emissions (million tons)"),
-            main=expression("PM"[2.5]*" Emissions in the U.S. By Year"),
+            main=expression("PM"[2.5]*" Emissions in the U.S."),
             axes=FALSE)
 
     # Create axis without scientific notation
