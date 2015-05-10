@@ -15,17 +15,15 @@ plot4 <- function () {
     coal <- totalFuelEmissionsByYear("coal")
 
     library(ggplot2)
+    library(scales)
 
     graph <- ggplot(coal,
            aes(x=factor(year),y=emissions)) +
-        
         geom_bar(stat="identity") +
         xlab("year") +
-        ylab(expression("PM"[2.5]*" Emissions from Coal Combusion in the U.S. By Year")) +
-        ggtitle ("Coal Combustion Emissions")
+        ylab(expression("PM"[2.5]*" Emissions (tons)")) +
+        ggtitle (expression("PM"[2.5]*" Emissions from Coal Combusion in the U.S.")) +
+        scale_y_continuous(labels=comma)
 
-    # To do:
-    # 1. Rescale vertical axis so that it's not exponential
-    # 2. Add color?
     writePlotFile(graph, "plot4.png", "png")
 }
