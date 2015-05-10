@@ -23,6 +23,7 @@ readData <- function (directory) {
   if (missing(directory)) {
     directory <- "/Users/mgast/Dropbox/data-science-specialization/4-exploratory-data-analysis/prog-assignment-2"
   }
+  setwd(directory)
 
   # Reading takes some time, so only read them if they don't already exist
   #
