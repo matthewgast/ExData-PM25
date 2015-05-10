@@ -11,12 +11,12 @@ atmosphere. Approximatly every 3 years, the EPA releases its database
 on emissions of PM_{2.5}. This database is known as the National
 Emissions Inventory (NEI). You can read more information about the NEI
 at the 
-[[http://www.epa.gov/ttn/chief/eiinformation.html][EPA National Emissions Inventory web site]].
+[EPA National Emissions Inventory web site](http://www.epa.gov/ttn/chief/eiinformation.html).
 
 For each year and for each type of PM source, the NEI records how many
 tons of PM_{2.5} were emitted from that source over the course of the
 entire year. The data used in this assignment are from 1999, 2002,
-2005, and 2008, and are available [[https://d396qusza40orc.cloudfront.net/exdata%252Fdata%252FNEI_data.zip][here]].
+2005, and 2008, and are available [here](https://d396qusza40orc.cloudfront.net/exdata%252Fdata%252FNEI_data.zip).
 
 ## Research questions
 
