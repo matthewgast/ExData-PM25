@@ -16,7 +16,7 @@ plot4 <- function () {
 
     library(ggplot2)
 
-    ggplot(coal,
+    graph <- ggplot(coal,
            aes(x=factor(year),y=emissions)) +
         
         geom_bar(stat="identity") +
@@ -27,5 +27,5 @@ plot4 <- function () {
     # To do:
     # 1. Rescale vertical axis so that it's not exponential
     # 2. Add color?
-    
+    writePlotFile(graph, "plot4.png", "png")
 }
