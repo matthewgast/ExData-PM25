@@ -15,6 +15,7 @@ plot2 <- function () {
     readData()
     te <- totalEmissionsByYearByLocation("24510")
 
+    png("plot2.png")
     barplot(te$emissions,
             names.arg=te$year,
             xlab="Year",
@@ -23,4 +24,5 @@ plot2 <- function () {
             )
 
     # ToDo: rescale Y axis (again)
+    dev.off()
 }

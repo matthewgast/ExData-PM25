@@ -16,6 +16,7 @@ plot1 <- function () {
     readData()
     te <- totalEmissionsByYear()
 
+    png("plot1.png")
     barplot(te$emissions,
             names.arg=te$year,
             xlab="Year",
@@ -27,5 +28,6 @@ plot1 <- function () {
     
     #ypos <- seq(0,8,by=1)
     #axis(2,at=ypos, labels=sprintf("%.2fkb", ypos/1000000))
-            
+
+    dev.off()
 }
