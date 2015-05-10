@@ -20,9 +20,8 @@ plot3 <- function () {
 
     library(ggplot2)
 
-    ggplot(te,
+    graph <- ggplot(te,
            aes(x=factor(year),y=emissions)) +
-
         facet_grid(. ~ type) +
         geom_bar(stat="identity") +
         xlab("year") +
@@ -30,4 +29,5 @@ plot3 <- function () {
 
     # To do: add legend for type?
     # Change vertical scale per type?
+    writePlotFile(graph, "plot3b.png", "png")
 }
