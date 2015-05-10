@@ -21,6 +21,5 @@ plot5 <- function () {
         ylab(expression("Total PM"[2.5]*" Emissions (tons)")) +
         ggtitle(expression("PM"[2.5]*" Auto Emissions in Baltimore"))
 
-    # Todo: rescale y axis
     writePlotFile(graph, "plot5.png", "png")
 }
