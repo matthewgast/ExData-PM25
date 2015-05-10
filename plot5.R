@@ -15,11 +15,12 @@ plot5 <- function () {
     balt.cars <- motorVehicleEmissions("24510")
 
     library(ggplot2)
-    ggplot (balt.cars, aes(x=factor(year),y=emissions)) +
+    graph <- ggplot (balt.cars, aes(x=factor(year),y=emissions)) +
         geom_bar(stat="identity") +
         xlab("year") +
         ylab(expression("Total PM"[2.5]*" Emissions (tons)")) +
         ggtitle(expression("PM"[2.5]*" Emissions in Baltimore from Cars By Year"))
 
     # Todo: rescale y axis
+    writePlotFile(graph, "plot5.png", "png")
 }
