@@ -19,15 +19,16 @@ plot3 <- function () {
     te <- totalEmissionsByTypeByYearByLocation("24510")
 
     library(ggplot2)
+    require(RColorBrewer)
 
     graph <- ggplot(te,
-           aes(x=factor(year),y=emissions)) +
+           aes(x=factor(year),y=emissions,fill=type)) +
         facet_grid(. ~ type) +
         geom_bar(stat="identity") +
         xlab("year") +
-        ylab("total PM2.5 emission (tons)")
-
-    # To do: add legend for type?
-    # Change vertical scale per type?
-    writePlotFile(graph, "plot3b.png", "png")
+        ylab("Total PM2.5 emission (tons)") +
+      ggtitle ("Emissions in Baltimore by Source Type") +
+      scale_fill_brewer(palette="Set1")
+    
+    writePlotFile(graph, "plot3.png", "png")
 }
