@@ -27,8 +27,9 @@ plot3 <- function () {
         geom_bar(stat="identity") +
         xlab("year") +
         ylab("Total PM2.5 emission (tons)") +
-      ggtitle ("Emissions in Baltimore by Source Type") +
-      scale_fill_brewer(palette="Set1")
+        ggtitle ("Emissions in Baltimore by Source Type") +
+        guides(fill=FALSE) +
+        scale_fill_brewer(palette="Set1")
     
     writePlotFile(graph, "plot3.png", "png")
 }
