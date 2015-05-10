@@ -145,6 +145,31 @@ motorVehicleEmissions <- function (location=NULL) {
     total
 }
 
+writePlotFile <- function (plot, file, type) {
+# This function writes a plot to a file.
+#
+# Input:  A plot to be saved to a file, a filename, and a type of file.  If
+#         no file type is specified, the file will be a PNG.
+# Output: The plot is written to the specified file.
+
+    if (missing(type)) {
+        type <- "png"
+    }
+
+    # Open the correct file type
+    if (identical(type,"png")) {
+        png(file)
+    }
+    if (identical(type,"pdf")) {
+        pdf(file)
+    }
+
+    # print the plot and save the file
+    print(plot)
+    dev.off()
+}
+
+
 # Multiple plot function
 # See http://www.cookbook-r.com/Graphs/Multiple_graphs_on_one_page_(ggplot2)/
 #
