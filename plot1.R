@@ -17,17 +17,17 @@ plot1 <- function () {
     te <- totalEmissionsByYear()
 
     png("plot1.png")
+    par(las=0)
     barplot(te$emissions,
             names.arg=te$year,
             xlab="Year",
-            ylab=expression("Total PM"[2.5]*" Emissions (tons)"),
+            ylab=expression("Total PM"[2.5]*" Emissions (million tons)"),
             main=expression("PM"[2.5]*" Emissions in the U.S. By Year"),
-            )
+            axes=FALSE)
 
-    #ToDo: rescale Y axis
-    
-    #ypos <- seq(0,8,by=1)
-    #axis(2,at=ypos, labels=sprintf("%.2fkb", ypos/1000000))
-
+    # Create axis without scientific notation
+    ypos <- seq(0,8,by=1)
+    par(las=2)
+    axis(2,at=ypos*1000000,labels = paste(ypos))
     dev.off()
 }
