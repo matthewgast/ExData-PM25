@@ -19,7 +19,7 @@ plot5 <- function () {
         geom_bar(stat="identity") +
         xlab("year") +
         ylab(expression("Total PM"[2.5]*" Emissions (tons)")) +
-        ggtitle(expression("PM"[2.5]*" Emissions in Baltimore from Cars By Year"))
+        ggtitle(expression("PM"[2.5]*" Auto Emissions in Baltimore"))
 
     # Todo: rescale y axis
     writePlotFile(graph, "plot5.png", "png")
