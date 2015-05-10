@@ -20,9 +20,7 @@ plot2 <- function () {
             names.arg=te$year,
             xlab="Year",
             ylab=expression("Total PM"[2.5]*" Emissions (tons)"),
-            main=expression("PM"[2.5]*" Emissions in the Baltimore City By Year"),
+            main=expression("PM"[2.5]*" Emissions in Baltimore"),
             )
-
-    # ToDo: rescale Y axis (again)
     dev.off()
 }
